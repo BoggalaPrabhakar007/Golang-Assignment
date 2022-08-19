@@ -1,0 +1,270 @@
+{
+  "consumes": [
+    "application/json",
+    "application/hal+json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "All port domain service related operations.",
+    "title": "Port Domain Service REST API",
+    "contact": {
+      "name": "Boggala Prabhakar",
+      "email": "reddyprabhakar528@gmail.com"
+    },
+    "version": "v1.0.0"
+  },
+  "paths": {
+    "/api/v1/port_domain_service/ports": {
+      "post": {
+        "description": "Read the ports from the file and insert the ports into database.",
+        "summary": "Read the ports from the file and insert the ports into database.",
+        "produces": [
+          "application/hal+json"
+        ],
+        "tags": [
+          "Port Domain Service"
+        ],
+        "operationId": "PortDomainServicePost",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of ports details.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PortDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get all the port Details.",
+        "summary": "Get all the port Details.",
+        "produces": [
+          "application/hal+json"
+        ],
+        "tags": [
+          "Port Domain Service"
+        ],
+        "operationId": "PortDomainServiceGetAll",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/PortDetails"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/port_domain_service/port/{id}": {
+      "patch": {
+        "description": "Modify the port details.",
+        "summary": "Modify the port details.",
+        "produces": [
+          "application/hal+json"
+        ],
+        "tags": [
+          "Port Domain Service"
+        ],
+        "operationId": "PortDomainServiceModify",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Port ID for  modifying port details.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of ports details.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PortDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get the port details.",
+        "summary": "Get the port details.",
+        "produces": [
+          "application/hal+json"
+        ],
+        "tags": [
+          "Port Domain Service"
+        ],
+        "operationId": "PortDomainServiceGet",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Port ID for getting port details.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/Port"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+  },
+  "definitions": {
+    "PortDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Port"
+      },
+      "x-go-name": "PortDetails"
+    },
+    "Port": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Port Name.",
+          "type": "string",
+          "example": "Visakhapatnam Port"
+        },
+        "city": {
+          "description": "Port City.",
+          "type": "string",
+          "example": "Visakhapatnam"
+        },
+        "country": {
+          "description": "Port Country.",
+          "type": "string",
+          "example": "India"
+        },
+        "province": {
+          "description": "Port Name.",
+          "type": "string",
+          "example": "Visakhapatnam[India]"
+        },
+        "time_zone": {
+          "description": "Port City.",
+          "type": "string",
+          "example": "India Time Zone"
+        },
+        "code": {
+          "description": "Port Country.",
+          "type": "string",
+          "example": "52300"
+        },
+        "alias": {
+          "type": "array",
+          "items": {
+            "$ref": ""
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": ""
+          }
+        },
+        "unlocs": {
+          "type": "array",
+          "items": {
+            "$ref": ""
+          }
+        },
+        "coordinates": {
+          "type": "array",
+          "format": "float64",
+          "items": {
+            "$ref": ""
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/Error"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code",
+          "type": "string",
+          "readOnly": true,
+          "example": "invalid_input"
+        }
+      }
+    },
+    "SuccessResponse": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "example": "ok"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Port Domain Service",
+      "description": "Port Domain Service"
+    }
+  ]
+}
