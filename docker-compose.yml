@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  mongodb:
+    image: mongo:4.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - 27017:27017
+  appservice:
+    image: assignment:latest
+    ports:
+      - 8080:8080
