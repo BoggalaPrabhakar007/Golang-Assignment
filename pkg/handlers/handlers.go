@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -9,11 +10,12 @@ import (
 	"net/http"
 
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
+	repository "github.com/BoggalaPrabhakar007/golang-assignment/repository-lib/pkg/mongodb"
 )
 
 var repoPortInfo = make(map[string]models.Port)
 
-// InsertPortData will read the data from the json file and insert the data in repository
+// InsertPortData will read the data from the json file and insert the data in repo
 func InsertPortData(w http.ResponseWriter, r *http.Request) {
 	//read the port data from the post.json file
 	pData, err := ioutil.ReadFile("ports.json")
@@ -28,11 +30,12 @@ func InsertPortData(w http.ResponseWriter, r *http.Request) {
 	for k, v := range portsInfo {
 		repoPortInfo[k] = v
 	}
+	repository.InsertRecord(context.Background(), "portDatabase", "portcollection", portsInfo)
 	fmt.Fprintf(w, "ok")
 
 }
 
-// GetPortData gets the port data from repository
+// GetPortData gets the port data from repo
 func GetPortData(w http.ResponseWriter, r *http.Request) {
 	pData := new(bytes.Buffer)
 	for k, v := range repoPortInfo {
