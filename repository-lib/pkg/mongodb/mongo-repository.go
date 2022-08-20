@@ -3,6 +3,8 @@ package mongodb
 import (
 	"context"
 	"errors"
+	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -111,4 +113,23 @@ func GetRecords(_ context.Context, databaseName string, collectionName string, r
 		return err
 	}
 	return nil
+}
+
+//DeleteRecordByID - Deletes the record with the specific ID provided.
+func DeleteRecordByID(ctx context.Context, databaseName string, collectionName string, id string) error {
+	mClient, err := GetConnectionClient()
+	if err != nil {
+		return err
+	}
+	mongoDataBase := mClient.Database(databaseName)
+	mongoCollection := mongoDataBase.Collection(collectionName)
+	resp, err := mongoCollection.DeleteOne(context.TODO(), bson.D{{"_id", id}}, nil)
+	if err != nil {
+		return err
+	}
+	if resp.DeletedCount == 0 {
+		errMsg := fmt.Sprintf("no document found with the ID [%s]", id)
+		return fmt.Errorf(errMsg)
+	}
+	return err
 }

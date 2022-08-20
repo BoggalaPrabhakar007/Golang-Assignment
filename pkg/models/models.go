@@ -13,3 +13,8 @@ type Port struct {
 	Unlocs      []string  `json:"unlocs"`
 	Code        string    `json:"code"`
 }
+
+type PortDetails struct {
+	ID   string `json:"id" bson:"_id,omitempty"`
+	Port Port   `json:"port"`
+}
