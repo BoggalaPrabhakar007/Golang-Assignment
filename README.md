@@ -1,8 +1,7 @@
 
 # Golang Assignment
 
-A brief description of what this project does and who it's for
-
+This project is about getting the json data and storing into the database and doing CRUD oeration on data.
 
 ## Clone project
 
