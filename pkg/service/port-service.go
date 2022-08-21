@@ -3,15 +3,16 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/repo"
+
+	"github.com/gorilla/mux"
 )
 
 var repoPortInfo = make(map[string]models.Port)
@@ -88,7 +89,7 @@ func DeletePortByID(w http.ResponseWriter, r *http.Request) {
 // UpdatePortByID delete the port data by id from repo
 func UpdatePortByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var request models.Port
+	var request models.PortDetails
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		log.Fatal(err)
@@ -97,7 +98,7 @@ func UpdatePortByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars[constants.ID]
 	//repo layer call for getting data from database
-	err2 := repo.UpdatePortByID(context.Background(), id, request)
+	err2 := repo.UpdatePortByID(context.Background(), id, &request)
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(err2)

@@ -83,7 +83,7 @@
       }
     },
     "/api/v1/port_domain_service/port/{id}": {
-      "patch": {
+      "put": {
         "description": "Modify the port details.",
         "summary": "Modify the port details.",
         "produces": [
@@ -159,6 +159,40 @@
             }
           }
         }
+      },
+      "delete": {
+        "description": "Delete the port details.",
+        "summary": "Delete the port details.",
+        "produces": [
+          "application/hal+json"
+        ],
+        "tags": [
+          "Port Domain Service"
+        ],
+        "operationId": "PortDomainServiceDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Port ID for getting port details.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
       }
     }
   },
@@ -166,105 +200,113 @@
   },
   "definitions": {
     "PortDetails": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Port"
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "port": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Port"
+          },
+          "x-go-name": "PortDetails"
+        }
+    }
+  },
+  "Port": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Port Name.",
+        "type": "string",
+        "example": "Visakhapatnam Port"
       },
-      "x-go-name": "PortDetails"
-    },
-    "Port": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "Port Name.",
-          "type": "string",
-          "example": "Visakhapatnam Port"
-        },
-        "city": {
-          "description": "Port City.",
-          "type": "string",
-          "example": "Visakhapatnam"
-        },
-        "country": {
-          "description": "Port Country.",
-          "type": "string",
-          "example": "India"
-        },
-        "province": {
-          "description": "Port Name.",
-          "type": "string",
-          "example": "Visakhapatnam[India]"
-        },
-        "time_zone": {
-          "description": "Port City.",
-          "type": "string",
-          "example": "India Time Zone"
-        },
-        "code": {
-          "description": "Port Country.",
-          "type": "string",
-          "example": "52300"
-        },
-        "alias": {
-          "type": "array",
-          "items": {
-            "$ref": ""
-          }
-        },
-        "regions": {
-          "type": "array",
-          "items": {
-            "$ref": ""
-          }
-        },
-        "unlocs": {
-          "type": "array",
-          "items": {
-            "$ref": ""
-          }
-        },
-        "coordinates": {
-          "type": "array",
-          "format": "float64",
-          "items": {
-            "$ref": ""
-          }
+      "city": {
+        "description": "Port City.",
+        "type": "string",
+        "example": "Visakhapatnam"
+      },
+      "country": {
+        "description": "Port Country.",
+        "type": "string",
+        "example": "India"
+      },
+      "province": {
+        "description": "Port Name.",
+        "type": "string",
+        "example": "Visakhapatnam[India]"
+      },
+      "time_zone": {
+        "description": "Port City.",
+        "type": "string",
+        "example": "India Time Zone"
+      },
+      "code": {
+        "description": "Port Country.",
+        "type": "string",
+        "example": "52300"
+      },
+      "alias": {
+        "type": "array",
+        "items": {
+          "$ref": ""
         }
-      }
-    },
-    "ErrorResponse": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "$ref": "#/definitions/Error"
+      },
+      "regions": {
+        "type": "array",
+        "items": {
+          "$ref": ""
         }
-      }
-    },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "description": "Error code",
-          "type": "string",
-          "readOnly": true,
-          "example": "invalid_input"
+      },
+      "unlocs": {
+        "type": "array",
+        "items": {
+          "$ref": ""
         }
-      }
-    },
-    "SuccessResponse": {
-      "properties": {
-        "status": {
-          "type": "string",
-          "readOnly": true,
-          "example": "ok"
+      },
+      "coordinates": {
+        "type": "array",
+        "format": "float64",
+        "items": {
+          "$ref": ""
         }
       }
     }
   },
-  "tags": [
-    {
-      "name": "Port Domain Service",
-      "description": "Port Domain Service"
+  "ErrorResponse": {
+    "type": "object",
+    "properties": {
+      "error": {
+        "$ref": "#/definitions/Error"
+      }
     }
-  ]
+  },
+  "Error": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "description": "Error code",
+        "type": "string",
+        "readOnly": true,
+        "example": "invalid_input"
+      }
+    }
+  },
+  "SuccessResponse": {
+    "properties": {
+      "status": {
+        "type": "string",
+        "readOnly": true,
+        "example": "ok"
+      }
+    }
+  }
+},
+"tags": [
+{
+"name": "Port Domain Service",
+"description": "Port Domain Service"
+}
+]
 }

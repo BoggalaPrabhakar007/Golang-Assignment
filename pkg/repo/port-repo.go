@@ -2,11 +2,13 @@ package repo
 
 import (
 	"context"
-	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	repository "github.com/BoggalaPrabhakar007/golang-assignment/repository-lib/pkg/mongodb"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 const CollectionName = "PortsCollection"
@@ -48,24 +50,29 @@ func DeletePortByID(_ context.Context, id string) error {
 }
 
 //UpdatePortByID will edit the port Details
-func UpdatePortByID(ctx context.Context, id string, port models.Port) error {
-	updateMap := make(map[string]interface{})
-	filter := make(map[string]interface{})
-	updateMap[constants.Name] = port.Name
-	updateMap[constants.City] = port.City
-	updateMap[constants.Code] = port.Code
-	updateMap[constants.Unlocs] = port.Unlocs
-	updateMap[constants.Province] = port.Province
-	updateMap[constants.Alias] = port.Alias
-	updateMap[constants.Regions] = port.Regions
-	updateMap[constants.TimeZone] = port.Timezone
-	updateMap[constants.Coordinates] = port.Coordinates
-	updateMap[constants.Country] = port.Country
-	filter[constants.DBID] = id
-
-	_, _, err := repository.UpdateRecord(ctx, config.DatabaseName, CollectionName, filter, updateMap)
+func UpdatePortByID(ctx context.Context, id string, port *models.PortDetails) error {
+	filter := bson.M{constants.DBID: id}
+	update, err := getUpdateObject(port)
+	if err != nil {
+		return err
+	}
+	_, _, err = repository.UpdateRecord(ctx, config.DatabaseName, CollectionName, filter, bson.M{"$set": update})
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// Gets update object in BSON format
+func getUpdateObject(v interface{}) (interface{}, error) {
+	pByte, err := bson.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	var update bson.M
+	err = bson.Unmarshal(pByte, &update)
+	if err != nil {
+		return nil, err
+	}
+	return update, nil
 }

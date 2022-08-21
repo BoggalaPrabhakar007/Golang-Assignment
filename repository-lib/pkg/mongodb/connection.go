@@ -3,19 +3,18 @@ package mongodb
 import (
 	"context"
 
+	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-//ConnString is for connecting to mongo database
-const ConnString string = "mongodb://mongoadmin:secret@localhost:27017"
 
 var client *mongo.Client
 
 //createConnection creates the mongodb client object.
 func createConnection() error {
 	var err error
-	clientOptions := options.Client().ApplyURI(ConnString)
+	clientOptions := options.Client().ApplyURI(config.ConnString)
 	//connecting to mongo database and getting the mongo client
 	client, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
