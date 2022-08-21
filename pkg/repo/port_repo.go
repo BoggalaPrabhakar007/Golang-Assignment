@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
@@ -13,8 +12,21 @@ import (
 
 const CollectionName = "PortsCollection"
 
+// PortRepoService service for port repo related activities
+type PortRepoService interface {
+	InsertPorts(ctx context.Context, portsDetails []models.PortDetails) error
+	GetPorts(ctx context.Context) ([]models.PortDetails, error)
+	GetPortByID(ctx context.Context, id string) (models.PortDetails, error)
+	DeletePortByID(ctx context.Context, id string) error
+	UpdatePortByID(ctx context.Context, id string, port *models.PortDetails) error
+}
+
+//PortRepoServ to do operation on port repo data
+type PortRepoServ struct {
+}
+
 // InsertPorts insert the data into database
-func InsertPorts(_ context.Context, portsDetails []models.PortDetails) error {
+func (p PortRepoServ) InsertPorts(ctx context.Context, portsDetails []models.PortDetails) error {
 	portsDetailsDocs := make([]interface{}, len(portsDetails))
 	for i, val := range portsDetails {
 		portsDetailsDocs[i] = val
@@ -27,7 +39,7 @@ func InsertPorts(_ context.Context, portsDetails []models.PortDetails) error {
 }
 
 // GetPorts gets the data from database
-func GetPorts(_ context.Context) ([]models.PortDetails, error) {
+func (p PortRepoServ) GetPorts(ctx context.Context) ([]models.PortDetails, error) {
 	var portsDetails []models.PortDetails
 	var filter = make(map[string]interface{})
 	err := repository.GetRecords(context.Background(), config.DatabaseName, CollectionName, &portsDetails, filter, nil)
@@ -35,7 +47,7 @@ func GetPorts(_ context.Context) ([]models.PortDetails, error) {
 }
 
 // GetPortByID gets the data from database using id
-func GetPortByID(_ context.Context, id string) (models.PortDetails, error) {
+func (p PortRepoServ) GetPortByID(ctx context.Context, id string) (models.PortDetails, error) {
 	var portDetails models.PortDetails
 	var filter = make(map[string]interface{})
 	filter[constants.DBID] = id
@@ -44,13 +56,13 @@ func GetPortByID(_ context.Context, id string) (models.PortDetails, error) {
 }
 
 // DeletePortByID delete the data from database using id
-func DeletePortByID(_ context.Context, id string) error {
+func (p PortRepoServ) DeletePortByID(ctx context.Context, id string) error {
 	err := repository.DeleteRecordByID(context.Background(), config.DatabaseName, CollectionName, id)
 	return err
 }
 
 //UpdatePortByID will edit the port Details
-func UpdatePortByID(ctx context.Context, id string, port *models.PortDetails) error {
+func (p PortRepoServ) UpdatePortByID(ctx context.Context, id string, port *models.PortDetails) error {
 	filter := bson.M{constants.DBID: id}
 	update, err := getUpdateObject(port)
 	if err != nil {

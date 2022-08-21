@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/service"
+	"github.com/BoggalaPrabhakar007/golang-assignment/endpoint"
 
 	"github.com/gorilla/mux"
 )
@@ -25,9 +25,9 @@ const (
 
 //InitTransport http endpoints
 func InitTransport(r *mux.Router) {
-	r.HandleFunc(RegisterPortsURI, service.InsertPortData).Methods(http.MethodPost)
-	r.HandleFunc(GetPortsURI, service.GetPortData).Methods(http.MethodGet)
-	r.HandleFunc(GetPortByIDURI, service.GetPortDataByID).Methods(http.MethodGet)
-	r.HandleFunc(UpdatePortURI, service.UpdatePortByID).Methods(http.MethodPut)
-	r.HandleFunc(DeletePortIRI, service.DeletePortByID).Methods(http.MethodDelete)
+	r.HandleFunc(RegisterPortsURI, endpoint.InsertPortDataEndPoint).Methods(http.MethodPost)
+	r.HandleFunc(GetPortsURI, endpoint.GetPortsDataEndPoint).Methods(http.MethodGet)
+	r.HandleFunc(GetPortByIDURI, endpoint.GetPortDataByIDEndPoint).Methods(http.MethodGet)
+	r.HandleFunc(UpdatePortURI, endpoint.UpdatePortByIDEndPoint).Methods(http.MethodPut)
+	r.HandleFunc(DeletePortIRI, endpoint.DeletePortByIDEndPoint).Methods(http.MethodDelete)
 }
