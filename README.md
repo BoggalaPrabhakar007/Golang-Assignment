@@ -18,7 +18,7 @@ Navigate to project folder
 ```bash
   cd golang-assignment
 ```
-## Build the micro service (project) docker image
+## Build the microservice (project) docker image
 
 run below command
 
@@ -26,7 +26,7 @@ run below command
   docker build -t goland-assignment-image .
 ```
  
-## Deploy the micro service and mongo db 
+## Deploy the microservice and mongodb 
 
 run below command
 
@@ -34,7 +34,7 @@ run below command
    docker-compose up -d
 ```
 
-## To Stop the micro service and mongo db 
+## To Stop the microservice and mongodb 
 
 run below command
 
