@@ -48,8 +48,22 @@ run below command
    PS C:\Users\boggala\go\src\golang-assignment> docker-compose down
 ```
 
-
-
+## Postman
+open the postman in your system follow the below screenshots
+## InsertData
+![InsertData](/images/InsertData.JPG)
+## GetData
+![GetData](/images/GetData.JPG)
+## UpdateData
+![UpdateData](/images/UpdateData.JPG)
+## After Update
+![AfterUpdate](/images/AfterUpdate.JPG)
+## GetDataById
+![GetDataByID](/images/GetDataByID.JPG)
+## DeleteDataById
+![DeleteDataById](/images/DeleteData.JPG)
+## Swagger 
+![Swagger](/images/Swagger.JPG)
 
   
 
