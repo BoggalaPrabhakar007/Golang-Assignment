@@ -7,7 +7,3 @@ const (
 	//ConnString is for connecting to mongo database
 	ConnString string = "mongodb://mongoadmin:secret@golang-assignment_mongo_1:27017"
 )
-
-func LoadConfig() {
-
-}
