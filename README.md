@@ -3,6 +3,8 @@
 
 This project is about getting the json data and storing into the database and doing CRUD oeration on data.
 
+## Project Architecture
+![Architecture](/images/PortServiceArchitecture.JPG)
 ## Clone project
 
 To clone this project run.
