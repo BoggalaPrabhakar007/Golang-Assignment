@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"context"
-
+	"fmt"
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,7 +14,8 @@ var client *mongo.Client
 //createConnection creates the mongodb client object.
 func createConnection() error {
 	var err error
-	clientOptions := options.Client().ApplyURI(config.ConnString)
+	connStr := getConnString()
+	clientOptions := options.Client().ApplyURI(connStr)
 	//connecting to mongo database and getting the mongo client
 	client, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
@@ -40,4 +41,9 @@ func DisconnectConnection() error {
 		err = client.Disconnect(context.Background())
 	}
 	return err
+}
+func getConnString() string {
+	//Load the config file
+	config := config.LoadConfig()
+	return fmt.Sprintf(config.Database.ConnStr, config.Database.Username, config.Database.Password, config.Database.Port)
 }

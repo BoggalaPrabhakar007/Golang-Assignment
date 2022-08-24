@@ -1,0 +1,9 @@
+server:
+  port: ":8080"
+database:
+  username: "mongoadmin"
+  password: "secret"
+  port: "27017"
+  connectionString: "mongodb://%s:%s@golang-assignment_mongo_1:%s"
+file:
+  filePath: "ports.json"

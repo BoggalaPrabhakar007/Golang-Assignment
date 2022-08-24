@@ -2,19 +2,24 @@ package models
 
 //Port structure info
 type Port struct {
-	Name        string    `json:"name"`
-	City        string    `json:"city"`
-	Country     string    `json:"country"`
-	Alias       []string  `json:"alias"`
-	Regions     []string  `json:"regions"`
-	Coordinates []float64 `json:"coordinates"`
-	Province    string    `json:"province"`
-	Timezone    string    `json:"time_zone"`
-	Unlocs      []string  `json:"unlocs"`
-	Code        string    `json:"code"`
+	Name        string    `json:"name" bson:"Name,omitempty"`
+	City        string    `json:"city" bson:"City,omitempty"`
+	Country     string    `json:"country" bson:"Country,omitempty"`
+	Alias       []string  `json:"alias" bson:"Alias,omitempty"`
+	Regions     []string  `json:"regions" bson:"Regions,omitempty"`
+	Coordinates []float64 `json:"coordinates" bson:"Coordinates,omitempty"`
+	Province    string    `json:"province" bson:"Province,omitempty"`
+	Timezone    string    `json:"timezone" bson:"Timezone,omitempty"`
+	Unlocs      []string  `json:"unlocs" bson:"Unlocs,omitempty"`
+	Code        string    `json:"code" bson:"Code,omitempty"`
 }
 
+//PortDetails structure info
 type PortDetails struct {
 	ID   string `json:"id" bson:"_id,omitempty"`
-	Port Port   `json:"port"`
+	Port Port   `json:"port" bson:"Port,omitempty"`
+}
+
+type PortNew struct {
+	Port Port `json:"port" bson:"Port,omitempty"`
 }

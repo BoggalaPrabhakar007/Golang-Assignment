@@ -22,7 +22,8 @@ func main() {
 	//mux router
 	r := mux.NewRouter()
 	transport.InitTransport(r)
-
+	//Load the config file
+	config := config.LoadConfig()
 	//connecting to database
 	_, err := repository.GetConnectionClient()
 	if err != nil {
@@ -30,8 +31,8 @@ func main() {
 	}
 
 	//starting the http server
-	fmt.Println(fmt.Sprintf(Msg, config.PortNumber))
-	err = http.ListenAndServe(config.PortNumber, r)
+	fmt.Println(fmt.Sprintf(Msg, config.Server.Port))
+	err = http.ListenAndServe(config.Server.Port, r)
 	if err != nil {
 		log.Fatal(err)
 	}

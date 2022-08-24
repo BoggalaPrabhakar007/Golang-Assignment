@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/BoggalaPrabhakar007/golang-assignment/config"
 	repomock "github.com/BoggalaPrabhakar007/golang-assignment/pkg/mocks"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	"github.com/stretchr/testify/mock"
@@ -35,6 +36,7 @@ func TestPortServ_GetPortsData(t *testing.T) {
 			rMock := repomock.PortRepoService{}
 			rMock.On("GetPorts", mock.Anything).Return(tt.want, tt.err)
 			p := PortServ{}
+			config.LoadConfig()
 			got, err := p.GetPortsData(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetPortsData() error = %v, wantErr %v", err, tt.wantErr)
@@ -48,6 +50,7 @@ func TestPortServ_GetPortsData(t *testing.T) {
 }
 
 func TestPortServ_GetPortDataByID(t *testing.T) {
+	config.LoadConfig()
 	type args struct {
 		ctx context.Context
 		id  string
@@ -88,6 +91,7 @@ func TestPortServ_GetPortDataByID(t *testing.T) {
 }
 
 func TestPortServ_DeletePortByID(t *testing.T) {
+	config.LoadConfig()
 	type args struct {
 		ctx context.Context
 		id  string
@@ -121,6 +125,7 @@ func TestPortServ_DeletePortByID(t *testing.T) {
 }
 
 func TestPortServ_UpdatePortByID(t *testing.T) {
+	config.LoadConfig()
 	type args struct {
 		ctx  context.Context
 		port models.PortDetails

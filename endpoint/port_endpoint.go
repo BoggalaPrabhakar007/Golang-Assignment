@@ -9,15 +9,21 @@ import (
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/service"
-	
+
 	"github.com/gorilla/mux"
 )
 
 // InsertPortDataEndPoint endpoint for insert data
 func InsertPortDataEndPoint(w http.ResponseWriter, r *http.Request) {
+	var portsInfo = make(map[string]models.Port)
+	// if u want to read the data from http request uncomment the below lines
+	/*err := json.NewDecoder(r.Body).Decode(&portsInfo)
+	if err != nil {
+		log.Fatal(err)
+	}*/
 	pServ := service.PortServ{}
 	portService := service.PortService(pServ)
-	err := portService.InsertPortData(context.Background(), r)
+	err := portService.InsertPortData(context.Background(), portsInfo)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(err)

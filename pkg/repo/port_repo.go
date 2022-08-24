@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	repository "github.com/BoggalaPrabhakar007/golang-assignment/repository-lib/pkg/mongodb"
@@ -31,7 +31,7 @@ func (p PortRepoServ) InsertPorts(ctx context.Context, portsDetails []models.Por
 	for i, val := range portsDetails {
 		portsDetailsDocs[i] = val
 	}
-	_, err := repository.InsertMultipleRecords(context.Background(), config.DatabaseName, CollectionName, portsDetailsDocs)
+	_, err := repository.InsertMultipleRecords(context.Background(), constants.DatabaseName, CollectionName, portsDetailsDocs)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (p PortRepoServ) InsertPorts(ctx context.Context, portsDetails []models.Por
 func (p PortRepoServ) GetPorts(ctx context.Context) ([]models.PortDetails, error) {
 	var portsDetails []models.PortDetails
 	var filter = make(map[string]interface{})
-	err := repository.GetRecords(context.Background(), config.DatabaseName, CollectionName, &portsDetails, filter, nil)
+	err := repository.GetRecords(context.Background(), constants.DatabaseName, CollectionName, &portsDetails, filter, nil)
 	return portsDetails, err
 }
 
@@ -51,13 +51,13 @@ func (p PortRepoServ) GetPortByID(ctx context.Context, id string) (models.PortDe
 	var portDetails models.PortDetails
 	var filter = make(map[string]interface{})
 	filter[constants.DBID] = id
-	err := repository.GetRecord(context.Background(), config.DatabaseName, CollectionName, &portDetails, filter, nil)
+	err := repository.GetRecord(context.Background(), constants.DatabaseName, CollectionName, &portDetails, filter, nil)
 	return portDetails, err
 }
 
 // DeletePortByID delete the data from database using id
 func (p PortRepoServ) DeletePortByID(ctx context.Context, id string) error {
-	err := repository.DeleteRecordByID(context.Background(), config.DatabaseName, CollectionName, id)
+	err := repository.DeleteRecordByID(context.Background(), constants.DatabaseName, CollectionName, id)
 	return err
 }
 
@@ -68,7 +68,7 @@ func (p PortRepoServ) UpdatePortByID(ctx context.Context, id string, port *model
 	if err != nil {
 		return err
 	}
-	_, _, err = repository.UpdateRecord(ctx, config.DatabaseName, CollectionName, filter, bson.M{"$set": update})
+	_, _, err = repository.UpdateRecord(ctx, constants.DatabaseName, CollectionName, filter, bson.M{"$set": update})
 	if err != nil {
 		return err
 	}

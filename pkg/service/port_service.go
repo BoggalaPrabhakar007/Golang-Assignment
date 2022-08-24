@@ -8,12 +8,11 @@ import (
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/repo"
 	"io/ioutil"
 	"log"
-	"net/http"
 )
 
 // PortService service for port related activities
 type PortService interface {
-	InsertPortData(ctx context.Context, r *http.Request) error
+	InsertPortData(ctx context.Context, ports map[string]models.Port) error
 	GetPortsData(ctx context.Context) ([]models.PortDetails, error)
 	GetPortDataByID(ctx context.Context, id string) (models.PortDetails, error)
 	DeletePortByID(ctx context.Context, id string) error
@@ -24,22 +23,17 @@ type PortService interface {
 type PortServ struct {
 }
 
-var repoPortInfo = make(map[string]models.Port)
+//var repoPortInfo = make(map[string]models.Port)
 
 // InsertPortData will read the data from the json file and insert the data in repo
-func (p PortServ) InsertPortData(ctx context.Context, r *http.Request) error {
-	// if u want to read the data from http request uncomment the below lines and comment from line no 40 to 48
-	/*var portsInfo = make(map[string]models.Port)
-	err := json.NewDecoder(r.Body).Decode(&portsInfo)
-	if err != nil {
-		log.Fatal(err)
-	}*/
+func (p PortServ) InsertPortData(ctx context.Context, portsInfo map[string]models.Port) error {
+	// If you want to pass the data from endpoint layer comment the code from line no 31 to 40
+	config := config.LoadConfig()
 	//read the port data from the file
-	pData, err := ioutil.ReadFile(config.FilePath)
+	pData, err := ioutil.ReadFile(config.FilePath.FilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	var portsInfo = make(map[string]models.Port)
 	err2 := json.Unmarshal(pData, &portsInfo)
 	if err2 != nil {
 		log.Fatal(err2)
