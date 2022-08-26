@@ -13,20 +13,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//portEndpoints expose endpoint for the port service
-type portEndpoints struct {
+//PortEndpoints expose endpoint for the port service
+type PortEndpoints struct {
 	pServ service.PortService
 }
 
-//NewEndpoint initialize endpoint
-func NewEndpoint(pServ service.PortService) portEndpoints {
-	return portEndpoints{
+//NewEndpoint initializes the port endpoint
+func NewEndpoint(pServ service.PortService) PortEndpoints {
+	return PortEndpoints{
 		pServ: pServ,
 	}
 }
 
 // InsertPortDataEndPoint endpoint for insert data
-func (p portEndpoints) InsertPortDataEndPoint(w http.ResponseWriter, r *http.Request) {
+func (p PortEndpoints) InsertPortDataEndPoint(w http.ResponseWriter, r *http.Request) {
 	var portsInfo = make(map[string]models.Port)
 	// if u want to read the data from http request uncomment the below lines
 	/*err := json.NewDecoder(r.Body).Decode(&portsInfo)
@@ -44,7 +44,7 @@ func (p portEndpoints) InsertPortDataEndPoint(w http.ResponseWriter, r *http.Req
 }
 
 // GetPortsDataEndPoint endpoint for gets  port data
-func (p portEndpoints) GetPortsDataEndPoint(w http.ResponseWriter, r *http.Request) {
+func (p PortEndpoints) GetPortsDataEndPoint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	portDetails, err := p.pServ.GetPortsData(context.Background())
 	if err != nil {
@@ -58,7 +58,7 @@ func (p portEndpoints) GetPortsDataEndPoint(w http.ResponseWriter, r *http.Reque
 }
 
 // GetPortDataByIDEndPoint endpoint for gets the port data by id
-func (p portEndpoints) GetPortDataByIDEndPoint(w http.ResponseWriter, r *http.Request) {
+func (p PortEndpoints) GetPortDataByIDEndPoint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	id := vars[constants.ID]
@@ -73,7 +73,7 @@ func (p portEndpoints) GetPortDataByIDEndPoint(w http.ResponseWriter, r *http.Re
 }
 
 // DeletePortByIDEndPoint endpoint for delete the port data by id
-func (p portEndpoints) DeletePortByIDEndPoint(w http.ResponseWriter, r *http.Request) {
+func (p PortEndpoints) DeletePortByIDEndPoint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	id := vars[constants.ID]
@@ -87,7 +87,7 @@ func (p portEndpoints) DeletePortByIDEndPoint(w http.ResponseWriter, r *http.Req
 }
 
 // UpdatePortByIDEndPoint endpoint for update the port data by id
-func (p portEndpoints) UpdatePortByIDEndPoint(w http.ResponseWriter, r *http.Request) {
+func (p PortEndpoints) UpdatePortByIDEndPoint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var request models.PortDetails
 	err := json.NewDecoder(r.Body).Decode(&request)

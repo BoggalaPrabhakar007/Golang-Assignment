@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+//CollectionName name of the collection in databse
 const CollectionName = "PortsCollection"
 
 // PortRepoService service for port repo related activities

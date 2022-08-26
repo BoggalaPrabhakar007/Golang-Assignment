@@ -19,7 +19,3 @@ type PortDetails struct {
 	ID   string `json:"id" bson:"_id,omitempty"`
 	Port Port   `json:"port" bson:"Port,omitempty"`
 }
-
-type PortNew struct {
-	Port Port `json:"port" bson:"Port,omitempty"`
-}
