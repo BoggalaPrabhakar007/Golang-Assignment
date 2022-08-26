@@ -78,6 +78,12 @@ run below command.
 ```bash 
    PS C:\Users\boggala\go\src\golang-assignment> docker-compose down
 ```
+## Lint Errors
+![Swagger](/images/Lint_Errors.JPG)
+
+## Unit Test Results
+Added total 32 UTs in the project.
+![Swagger](/images/Test_Results.JPG)
 
   
 
