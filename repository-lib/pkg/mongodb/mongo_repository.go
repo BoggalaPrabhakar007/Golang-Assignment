@@ -11,26 +11,29 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// RepoLib service the repository related operations
+type RepoLib interface {
+	InsertMultipleRecords(ctx context.Context, databaseName string, collectionName string, resources []interface{}) (interface{}, error)
+	UpdateRecord(ctx context.Context, databaseName string, collectionName string, filter map[string]interface{}, update map[string]interface{}) (int, int, error)
+	GetRecord(ctx context.Context, databaseName string, collectionName string, result interface{}, filter map[string]interface{}, projection map[string]interface{}) error
+	GetRecords(ctx context.Context, databaseName string, collectionName string, results interface{}, filter map[string]interface{}, projection map[string]interface{}) error
+	DeleteRecordByID(ctx context.Context, databaseName string, collectionName string, id string) error
+}
+
+//RepoLibServ to do repo related operations
+type RepoLibServ struct {
+}
+
+//NewRepoLibServ initialize the repo lib service
+func NewRepoLibServ() RepoLibServ {
+	return RepoLibServ{}
+}
+
 //ErrDocumentNotFound returned when document is not found
 var ErrDocumentNotFound = errors.New("document not found")
 
-//InsertRecord - inserts the "resource" param in to collection. Returns the id of the inserted records and error in case of failures
-func InsertRecord(_ context.Context, databaseName string, collectionName string, resource interface{}) (interface{}, error) {
-	mClient, err := GetConnectionClient()
-	if err != nil {
-		return nil, err
-	}
-	mongoDataBase := mClient.Database(databaseName)
-	mongoCollection := mongoDataBase.Collection(collectionName)
-	createResponse, err := mongoCollection.InsertOne(context.Background(), resource)
-	if err != nil {
-		return nil, err
-	}
-	return createResponse.InsertedID, err
-}
-
 //InsertMultipleRecords - Inserts multi records in to the collection. returns the list of inserted records and errors in case of failures.
-func InsertMultipleRecords(_ context.Context, databaseName string, collectionName string, resources []interface{}) (interface{}, error) {
+func (r RepoLibServ) InsertMultipleRecords(ctx context.Context, databaseName string, collectionName string, resources []interface{}) (interface{}, error) {
 	mClient, err := GetConnectionClient()
 	if err != nil {
 		return nil, err
@@ -46,7 +49,8 @@ func InsertMultipleRecords(_ context.Context, databaseName string, collectionNam
 	return insertResult.InsertedIDs, err
 }
 
-func UpdateRecord(_ context.Context, databaseName string, collectionName string, filter map[string]interface{}, update map[string]interface{}) (int, int, error) {
+//UpdateRecord - update the record in the collection after applying the filter.
+func (r RepoLibServ) UpdateRecord(ctx context.Context, databaseName string, collectionName string, filter map[string]interface{}, update map[string]interface{}) (int, int, error) {
 	var matchedCount int
 	var modifiedCount int
 	mClient, err := GetConnectionClient()
@@ -65,7 +69,8 @@ func UpdateRecord(_ context.Context, databaseName string, collectionName string,
 	return matchedCount, modifiedCount, nil
 }
 
-func GetRecord(_ context.Context, databaseName string, collectionName string, result interface{}, filter map[string]interface{}, projection map[string]interface{}) error {
+//GetRecord - returns the record from the collection after applying the filter.
+func (r RepoLibServ) GetRecord(ctx context.Context, databaseName string, collectionName string, result interface{}, filter map[string]interface{}, projection map[string]interface{}) error {
 	mClient, err := GetConnectionClient()
 	if err != nil {
 		return err
@@ -94,7 +99,7 @@ func GetRecord(_ context.Context, databaseName string, collectionName string, re
 }
 
 //GetRecords - returns the records from the collection after applying the filter.
-func GetRecords(_ context.Context, databaseName string, collectionName string, results interface{}, filter map[string]interface{}, projection map[string]interface{}) error {
+func (r RepoLibServ) GetRecords(ctx context.Context, databaseName string, collectionName string, results interface{}, filter map[string]interface{}, projection map[string]interface{}) error {
 	mClient, err := GetConnectionClient()
 	if err != nil {
 		return err
@@ -117,7 +122,7 @@ func GetRecords(_ context.Context, databaseName string, collectionName string, r
 }
 
 //DeleteRecordByID - Deletes the record with the specific ID provided.
-func DeleteRecordByID(ctx context.Context, databaseName string, collectionName string, id string) error {
+func (r RepoLibServ) DeleteRecordByID(ctx context.Context, databaseName string, collectionName string, id string) error {
 	mClient, err := GetConnectionClient()
 	if err != nil {
 		return err

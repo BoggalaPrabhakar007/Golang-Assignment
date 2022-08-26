@@ -5,5 +5,6 @@ database:
   password: "secret"
   port: "27017"
   connectionString: "mongodb://%s:%s@golang-assignment_mongo_1:%s"
+  #connectionString: "mongodb://%s:%s@localhost:%s"
 file:
   filePath: "ports.json"

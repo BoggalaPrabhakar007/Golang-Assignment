@@ -3,7 +3,9 @@ package mongodb
 import (
 	"context"
 	"fmt"
+
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -42,8 +44,10 @@ func DisconnectConnection() error {
 	}
 	return err
 }
+
+//getConnString gets the database connection string to connect database
 func getConnString() string {
 	//Load the config file
-	config := config.LoadConfig()
+	config := config.LoadConfig(constants.ConfigPath)
 	return fmt.Sprintf(config.Database.ConnStr, config.Database.Username, config.Database.Password, config.Database.Port)
 }

@@ -4,7 +4,7 @@ package domain
 type Config struct {
 	Server   Server
 	Database Database
-	FilePath FilePath
+	File     File
 }
 
 //Server holds the all the server details
@@ -20,7 +20,7 @@ type Database struct {
 	ConnStr  string
 }
 
-//FilePath holds the all the file path details
-type FilePath struct {
-	FilePath string
+//File holds the all the file path details
+type File struct {
+	Path string
 }

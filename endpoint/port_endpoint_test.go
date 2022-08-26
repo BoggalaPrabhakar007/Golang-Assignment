@@ -1,7 +1,12 @@
 package endpoint
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"strings"
 	"testing"
 
 	servicemock "github.com/BoggalaPrabhakar007/golang-assignment/pkg/mocks"
@@ -11,6 +16,7 @@ import (
 )
 
 func TestInsertPortDataEndPoint(t *testing.T) {
+	w := httptest.NewRecorder()
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request
@@ -22,20 +28,24 @@ func TestInsertPortDataEndPoint(t *testing.T) {
 	}{
 		{
 			name: "InsertPortDataEndPoint",
-			args: args{},
-			err:  nil,
+			args: args{
+				w: w,
+			},
+			err: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sMock := servicemock.PortService{}
+			ePortServ := NewEndpoint(&sMock)
 			sMock.On("InsertPortData", mock.Anything, mock.Anything).Return(tt.err)
-			InsertPortDataEndPoint(tt.args.w, tt.args.r)
+			ePortServ.InsertPortDataEndPoint(tt.args.w, tt.args.r)
 		})
 	}
 }
 
 func TestGetPortsDataEndPoint(t *testing.T) {
+	w := httptest.NewRecorder()
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request
@@ -48,7 +58,7 @@ func TestGetPortsDataEndPoint(t *testing.T) {
 	}{
 		{
 			name: "GetPortsDataEndPoint",
-			args: args{},
+			args: args{w: w},
 			want: []models.PortDetails{},
 			err:  nil,
 		},
@@ -56,13 +66,18 @@ func TestGetPortsDataEndPoint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sMock := servicemock.PortService{}
+			ePortServ := NewEndpoint(&sMock)
 			sMock.On("GetPortsData", mock.Anything).Return(tt.want, tt.err)
-			GetPortsDataEndPoint(tt.args.w, tt.args.r)
+			ePortServ.GetPortsDataEndPoint(tt.args.w, tt.args.r)
 		})
 	}
 }
 
 func TestGetPortDataByIDEndPoint(t *testing.T) {
+	httpVals := url.Values{}
+	httpVals.Add("id", "id")
+	req, _ := http.NewRequest("POST", " url", strings.NewReader(httpVals.Encode()))
+	w := httptest.NewRecorder()
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request
@@ -75,7 +90,7 @@ func TestGetPortDataByIDEndPoint(t *testing.T) {
 	}{
 		{
 			name: "GetPortDataByIDEndPoint",
-			args: args{},
+			args: args{w: w, r: req},
 			want: models.PortDetails{},
 			err:  nil,
 		},
@@ -83,13 +98,18 @@ func TestGetPortDataByIDEndPoint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sMock := servicemock.PortService{}
+			ePortServ := NewEndpoint(&sMock)
 			sMock.On("GetPortDataByID", mock.Anything, mock.Anything).Return(tt.want, tt.err)
-			GetPortDataByIDEndPoint(tt.args.w, tt.args.r)
+			ePortServ.GetPortDataByIDEndPoint(tt.args.w, tt.args.r)
 		})
 	}
 }
 
 func TestDeletePortByIDEndPoint(t *testing.T) {
+	httpVals := url.Values{}
+	httpVals.Add("id", "id")
+	req, _ := http.NewRequest("POST", " url", strings.NewReader(httpVals.Encode()))
+	w := httptest.NewRecorder()
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request
@@ -101,20 +121,27 @@ func TestDeletePortByIDEndPoint(t *testing.T) {
 	}{
 		{
 			name: "DeletePortByIDEndPoint",
-			args: args{},
+			args: args{w: w, r: req},
 			err:  nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sMock := servicemock.PortService{}
+			ePortServ := NewEndpoint(&sMock)
 			sMock.On("DeletePortByID", mock.Anything, mock.Anything).Return(tt.err)
-			DeletePortByIDEndPoint(tt.args.w, tt.args.r)
+			ePortServ.DeletePortByIDEndPoint(tt.args.w, tt.args.r)
 		})
 	}
 }
 
 func TestUpdatePortByIDEndPoint(t *testing.T) {
+	httpVals := url.Values{}
+	httpVals.Add("id", "id")
+	req, _ := http.NewRequest("POST", " url", strings.NewReader(httpVals.Encode()))
+	updateportBody, _ := json.Marshal(models.PortDetails{})
+	req.Body = ioutil.NopCloser(strings.NewReader(string(updateportBody)))
+	w := httptest.NewRecorder()
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request
@@ -126,15 +153,16 @@ func TestUpdatePortByIDEndPoint(t *testing.T) {
 	}{
 		{
 			name: "UpdatePortByIDEndPoint",
-			args: args{},
+			args: args{w: w, r: req},
 			err:  nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sMock := servicemock.PortService{}
-			sMock.On("DeletePortByID", mock.Anything, mock.Anything).Return(tt.err)
-			UpdatePortByIDEndPoint(tt.args.w, tt.args.r)
+			ePortServ := NewEndpoint(&sMock)
+			sMock.On("UpdatePortByID", mock.Anything, mock.Anything, mock.Anything).Return(tt.err)
+			ePortServ.UpdatePortByIDEndPoint(tt.args.w, tt.args.r)
 		})
 	}
 }

@@ -6,6 +6,9 @@ import (
 	"net/http"
 
 	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/constants"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/repo"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/service"
 	repository "github.com/BoggalaPrabhakar007/golang-assignment/repository-lib/pkg/mongodb"
 	transport "github.com/BoggalaPrabhakar007/golang-assignment/transport/http"
 
@@ -21,9 +24,18 @@ const (
 func main() {
 	//mux router
 	r := mux.NewRouter()
-	transport.InitTransport(r)
+
 	//Load the config file
-	config := config.LoadConfig()
+	config := config.LoadConfig(constants.ConfigPath)
+	//initialize the repo library
+	repoLib := repository.NewRepoLibServ()
+	//initialize the repo layer
+	repoServ := repo.NewPortRepoServ(repoLib)
+	//initialize the port service library
+	pServ := service.NewPortService(repoServ, config)
+	//initialize the transport endpoints
+	transport.InitTransport(r, pServ)
+
 	//connecting to database
 	_, err := repository.GetConnectionClient()
 	if err != nil {

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/BoggalaPrabhakar007/golang-assignment/config"
+	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/contracts/domain"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/repo"
 	"io/ioutil"
@@ -21,16 +21,23 @@ type PortService interface {
 
 //PortServ to do operation on port data
 type PortServ struct {
+	pRepo  repo.PortRepoService
+	config domain.Config
 }
 
-//var repoPortInfo = make(map[string]models.Port)
+//NewPortService initialize the port service
+func NewPortService(pRepo repo.PortRepoService, config domain.Config) PortService {
+	return PortServ{
+		pRepo:  pRepo,
+		config: config,
+	}
+}
 
 // InsertPortData will read the data from the json file and insert the data in repo
 func (p PortServ) InsertPortData(ctx context.Context, portsInfo map[string]models.Port) error {
-	// If you want to pass the data from endpoint layer comment the code from line no 31 to 40
-	config := config.LoadConfig()
+	// If you want to pass the data from endpoint layer comment the code from line no 40 to 47
 	//read the port data from the file
-	pData, err := ioutil.ReadFile(config.FilePath.FilePath)
+	pData, err := ioutil.ReadFile(p.config.File.Path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,18 +47,14 @@ func (p PortServ) InsertPortData(ctx context.Context, portsInfo map[string]model
 	}
 	fPortInfo := getFormattedPortData(portsInfo)
 	//repo layer call for inserting data into database
-	rServ := repo.PortRepoServ{}
-	repoService := repo.PortRepoService(rServ)
-	err3 := repoService.InsertPorts(ctx, fPortInfo)
+	err3 := p.pRepo.InsertPorts(ctx, fPortInfo)
 	return err3
 }
 
 // GetPortsData gets the port data from repo
 func (p PortServ) GetPortsData(ctx context.Context) ([]models.PortDetails, error) {
 	//repo layer call for getting data from database
-	rServ := repo.PortRepoServ{}
-	repoService := repo.PortRepoService(rServ)
-	portDetails, err := repoService.GetPorts(ctx)
+	portDetails, err := p.pRepo.GetPorts(ctx)
 	return portDetails, err
 
 }
@@ -59,9 +62,7 @@ func (p PortServ) GetPortsData(ctx context.Context) ([]models.PortDetails, error
 // GetPortDataByID gets the port data by id from repo
 func (p PortServ) GetPortDataByID(ctx context.Context, id string) (models.PortDetails, error) {
 	//repo layer call for getting data from database
-	rServ := repo.PortRepoServ{}
-	repoService := repo.PortRepoService(rServ)
-	portDetails, err := repoService.GetPortByID(ctx, id)
+	portDetails, err := p.pRepo.GetPortByID(ctx, id)
 	return portDetails, err
 
 }
@@ -69,18 +70,14 @@ func (p PortServ) GetPortDataByID(ctx context.Context, id string) (models.PortDe
 // DeletePortByID delete the port data by id from repo
 func (p PortServ) DeletePortByID(ctx context.Context, id string) error {
 	//repo layer call for getting data from database
-	rServ := repo.PortRepoServ{}
-	repoService := repo.PortRepoService(rServ)
-	err := repoService.DeletePortByID(ctx, id)
+	err := p.pRepo.DeletePortByID(ctx, id)
 	return err
 }
 
 // UpdatePortByID update the port data by id from repo
 func (p PortServ) UpdatePortByID(ctx context.Context, port models.PortDetails, id string) error {
 	//repo layer call for getting data from database
-	rServ := repo.PortRepoServ{}
-	repoService := repo.PortRepoService(rServ)
-	err := repoService.UpdatePortByID(ctx, id, &port)
+	err := p.pRepo.UpdatePortByID(ctx, id, &port)
 	return err
 }
 
