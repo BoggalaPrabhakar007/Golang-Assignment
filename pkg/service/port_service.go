@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
+	"log"
+
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/contracts/domain"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/models"
 	"github.com/BoggalaPrabhakar007/golang-assignment/pkg/repo"
-	"io/ioutil"
-	"log"
 )
 
 // PortService service for port related activities
