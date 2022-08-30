@@ -36,7 +36,11 @@ func NewPortService(pRepo repo.PortRepoService, config domain.Config) PortServic
 
 // InsertPortData will read the data from the json file and insert the data in repo
 func (p PortServ) InsertPortData(ctx context.Context, portsInfo map[string]models.Port) error {
-	// If you want to pass the data from endpoint layer comment the code from line no 40 to 47
+	// If you want to pass the data from endpoint layer comment the code from line no 45 to 52
+	/* Reading data from big JSON file we can do by using the json.NewDecoder(),empty interfafe{}, channels
+	   and finally read the data from channels and insert the data in databse to do CRUD operations doing
+	   like below.
+	*/
 	//read the port data from the file
 	pData, err := ioutil.ReadFile(p.config.File.Path)
 	if err != nil {
